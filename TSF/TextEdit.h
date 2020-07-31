@@ -3,6 +3,7 @@
 #include <msctf.h>
 #include <olectl.h>
 #include <xstring>
+#include <string>
 /*
 None of the GUIDs in TSATTRS.H are defined in a LIB, so you have to include
 INITGUID.H just before the first time you include TSATTRS.H
@@ -74,6 +75,9 @@ private:
 	//TextBox
 	TS_STATUS               m_status;
 	BOOL                    m_fLayoutChanged;
+
+	std::wstring 			m_stringBuffer;
+	DWORD 					m_resultLength = 0;
 public:
 	TfEditCookie            editcookie;
 	ITfContext*             context;
@@ -90,7 +94,7 @@ public:
 	STDMETHOD(QueryInterface)(REFIID, LPVOID*);
 	STDMETHOD_(DWORD, AddRef)();
 	STDMETHOD_(DWORD, Release)();
-	// Í¨¹ý ITextStoreACP ¼Ì³Ð
+	// Í¨ï¿½ï¿½ ITextStoreACP ï¿½Ì³ï¿½
 	STDMETHODIMP AdviseSink(REFIID riid, IUnknown* punk, DWORD dwMask);
 	STDMETHODIMP UnadviseSink(IUnknown* punk);
 	STDMETHODIMP RequestLock(DWORD dwLockFlags, HRESULT* phrSession);
@@ -118,15 +122,15 @@ public:
 	STDMETHODIMP GetScreenExt(TsViewCookie vcView, RECT* prc);
 	STDMETHODIMP GetWnd(TsViewCookie vcView, HWND* phwnd);
 
-	// Í¨¹ý ITfContextOwnerCompositionSink ¼Ì³Ð
+	// Í¨ï¿½ï¿½ ITfContextOwnerCompositionSink ï¿½Ì³ï¿½
 	STDMETHODIMP OnStartComposition(ITfCompositionView* pComposition, BOOL* pfOk);
 	STDMETHODIMP OnUpdateComposition(ITfCompositionView* pComposition, ITfRange* pRangeNew);
 	STDMETHODIMP OnEndComposition(ITfCompositionView* pComposition);
 
-	// Í¨¹ý ITfTransitoryExtensionSink ¼Ì³Ð
+	// Í¨ï¿½ï¿½ ITfTransitoryExtensionSink ï¿½Ì³ï¿½
 	STDMETHODIMP OnTransitoryExtensionUpdated(ITfContext* pic, TfEditCookie ecReadOnly, ITfRange* pResultRange, ITfRange* pCompositionRange, BOOL* pfDeleteResultRange);
 
-	// Í¨¹ý ITfDisplayAttributeNotifySink ¼Ì³Ð
+	// Í¨ï¿½ï¿½ ITfDisplayAttributeNotifySink ï¿½Ì³ï¿½
 	STDMETHODIMP OnUpdateInfo(void);
 private:
 	//TextStoreSink
@@ -143,7 +147,7 @@ private:
 	//TextBox
 	ULONG _GetTextLength();
 
-	// Í¨¹ý ITfUIElementSink ¼Ì³Ð
+	// Í¨ï¿½ï¿½ ITfUIElementSink ï¿½Ì³ï¿½
 	virtual HRESULT __stdcall BeginUIElement(DWORD dwUIElementId, BOOL* pbShow) override;
 	virtual HRESULT __stdcall UpdateUIElement(DWORD dwUIElementId) override;
 	virtual HRESULT __stdcall EndUIElement(DWORD dwUIElementId) override;

@@ -1,4 +1,6 @@
 #include "TextEdit.h"
+#include <iostream>
+#include <sstream>
 
 STDMETHODIMP TextEdit::AdviseSink(REFIID riid, IUnknown* punk, DWORD dwMask)
 {
@@ -479,6 +481,20 @@ STDMETHODIMP TextEdit::SetText(DWORD dwFlags, LONG acpStart, LONG acpEnd, const 
     dwFlags can be:
     TS_ST_CORRECTION
     */
+
+    OutputDebugString(TEXT("\t^^^^TextEdit::SetText()\n"));
+    m_stringBuffer.replace(acpStart - m_resultLength, acpEnd - acpStart, pchText);
+    OutputDebugString(m_stringBuffer.c_str());
+    OutputDebugString(TEXT("\n"));
+
+    std::wostringstream wss;
+
+    wss << acpStart;
+    wss << L",";
+    wss << acpEnd;
+    OutputDebugString(wss.str().c_str());
+    OutputDebugString(TEXT("\n"));
+    OutputDebugString(TEXT("\t&&&&TextEdit::SetText()\n"));
 
     if (dwFlags & TS_ST_CORRECTION)
     {

@@ -126,22 +126,37 @@ STDMETHODIMP_(DWORD) TextEdit::Release(void)
 STDMETHODIMP TextEdit::OnStartComposition(ITfCompositionView* pComposition, BOOL* pfOk)
 {
     OutputDebugString(TEXT("OnStartComposition\n"));
+
+    // Send composition string or result string
+    ::SendMessage(m_hWnd, 0x0F01, TRUE, (LPARAM)m_stringBuffer.c_str());
+
     *pfOk = TRUE;
-    SendMessage(m_hWnd, WM_IME_STARTCOMPOSITION, 0, 0);
     return S_OK;
 }
 
 STDMETHODIMP TextEdit::OnUpdateComposition(ITfCompositionView* pComposition, ITfRange* pRangeNew)
 {
     OutputDebugString(TEXT("OnUpdateComposition\n"));
-    SendMessage(m_hWnd, WM_IME_COMPOSITION, 0, 0);
+
+    // Send composition string or result string
+    ::SendMessage(m_hWnd, 0x0F02, TRUE, (LPARAM)m_stringBuffer.c_str());
+
     return S_OK;
 }
 
 STDMETHODIMP TextEdit::OnEndComposition(ITfCompositionView* pComposition)
 {
     OutputDebugString(TEXT("OnEndComposition\n"));
-    SendMessage(m_hWnd, WM_IME_ENDCOMPOSITION, 0, 0);
+
+    auto copy = m_stringBuffer;
+
+    m_resultLength += copy.length();
+
+    // Send composition string or result string
+    ::SendMessage(m_hWnd, 0x0F03, TRUE, (LPARAM)copy.c_str());
+
+    m_stringBuffer = L"";
+
     return S_OK;
 }
 
